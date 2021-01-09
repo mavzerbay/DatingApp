@@ -28,8 +28,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<DataContext>(options => options.UseMySql(connectionString: Configuration.GetConnectionString("DefaultConnection"),new MySqlServerVersion(new Version(8, 0, 21))));
-            
+            services.AddDbContext<DataContext>(options => options.UseMySql(connectionString: Configuration.GetConnectionString("DefaultConnection"), new MySqlServerVersion(new Version(8, 0, 21))));
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +43,10 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(
+                x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200")
+            );
 
             app.UseAuthorization();
 
